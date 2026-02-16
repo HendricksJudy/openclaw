@@ -1,0 +1,11 @@
+{
+  "name": "@clawhospital/channel-sms",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ClawHospital SMS channel plugin via Twilio/Vonage",
+  "type": "module",
+  "openclaw": {
+    "extensions": ["./index.ts"]
+  },
+  "dependencies": {}
+}

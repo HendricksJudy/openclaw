@@ -1,0 +1,55 @@
+{
+  "id": "clawhospital-channel-email",
+  "name": "Email Channel",
+  "description": "Email notifications for reports, bills, and follow-up (SendGrid/SMTP)",
+  "version": "1.0.0",
+  "channels": ["email"],
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "provider": {
+        "type": "string",
+        "enum": ["sendgrid", "smtp"],
+        "description": "Email provider"
+      },
+      "apiKey": {
+        "type": "string",
+        "description": "SendGrid API key (if using SendGrid)"
+      },
+      "smtpHost": {
+        "type": "string",
+        "description": "SMTP host (if using SMTP)"
+      },
+      "smtpPort": {
+        "type": "number",
+        "description": "SMTP port"
+      },
+      "smtpUser": {
+        "type": "string",
+        "description": "SMTP username"
+      },
+      "smtpPassword": {
+        "type": "string",
+        "description": "SMTP password"
+      },
+      "fromEmail": {
+        "type": "string",
+        "description": "Sender email address"
+      },
+      "fromName": {
+        "type": "string",
+        "description": "Sender display name"
+      }
+    },
+    "required": ["provider", "fromEmail"]
+  },
+  "uiHints": {
+    "provider": { "label": "Email Provider", "help": "Select SendGrid or SMTP" },
+    "apiKey": { "label": "SendGrid API Key", "sensitive": true },
+    "smtpHost": { "label": "SMTP Host", "placeholder": "smtp.example.com" },
+    "smtpPassword": { "label": "SMTP Password", "sensitive": true },
+    "fromEmail": { "label": "From Email", "placeholder": "noreply@hospital.com" },
+    "fromName": { "label": "From Name", "placeholder": "ClawHospital" }
+  }
+}

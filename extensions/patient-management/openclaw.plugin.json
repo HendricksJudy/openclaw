@@ -1,0 +1,6 @@
+{
+  "id": "clawhospital-patient-management",
+  "name": "Patient Management",
+  "description": "Patient registration, search, MPI, and demographics management",
+  "version": "1.0.0"
+}

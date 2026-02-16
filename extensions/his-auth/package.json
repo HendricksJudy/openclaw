@@ -1,0 +1,11 @@
+{
+  "name": "@clawhospital/his-auth",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ClawHospital RBAC authentication & authorization plugin",
+  "type": "module",
+  "openclaw": {
+    "extensions": ["./index.ts"]
+  },
+  "dependencies": {}
+}

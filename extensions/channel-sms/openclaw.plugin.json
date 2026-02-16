@@ -1,0 +1,37 @@
+{
+  "id": "clawhospital-channel-sms",
+  "name": "SMS Channel",
+  "description": "SMS messaging channel for patient notifications (Twilio/Vonage)",
+  "version": "1.0.0",
+  "channels": ["sms"],
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "provider": {
+        "type": "string",
+        "enum": ["twilio", "vonage"],
+        "description": "SMS provider"
+      },
+      "accountSid": {
+        "type": "string",
+        "description": "Twilio Account SID or Vonage API Key"
+      },
+      "authToken": {
+        "type": "string",
+        "description": "Twilio Auth Token or Vonage API Secret"
+      },
+      "fromNumber": {
+        "type": "string",
+        "description": "Sender phone number"
+      }
+    },
+    "required": ["provider", "accountSid", "authToken", "fromNumber"]
+  },
+  "uiHints": {
+    "provider": { "label": "SMS Provider", "help": "Select Twilio or Vonage" },
+    "accountSid": { "label": "Account SID / API Key" },
+    "authToken": { "label": "Auth Token / API Secret", "sensitive": true },
+    "fromNumber": { "label": "Sender Number", "placeholder": "+1234567890" }
+  }
+}
