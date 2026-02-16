@@ -2,7 +2,7 @@
 
 ## 基于 OpenClaw 的医院信息管理系统改造方案
 
-**版本:** v1.0-draft
+**版本:** v1.1-draft (国际市场版)
 **日期:** 2026-02-16
 **基线项目:** OpenClaw (多渠道 AI 网关平台)
 
@@ -43,9 +43,9 @@ OpenClaw 是一个成熟的多渠道 AI 网关平台，具备以下核心能力�
 将 OpenClaw 改造为 **ClawHospital**——一套继承 OpenClaw 多渠道通信与 AI 能力的医院信息管理系统（HIS），实现：
 
 - 以 AI Agent 为核心的智能辅助诊疗
-- 多渠道医患沟通（微信/企业微信/短信/Web 门户）
+- 多渠道医患沟通（WhatsApp/Telegram/Slack/SMS/Discord/Web Portal）
 - 完整的门诊/住院/药房/检验/财务业务闭环
-- 符合中国医疗信息化标准与数据安全要求
+- 符合国际医疗信息化标准（HIPAA/GDPR/HL7 FHIR）
 
 ### 1.3 目标用户
 
@@ -55,7 +55,7 @@ OpenClaw 是一个成熟的多渠道 AI 网关平台，具备以下核心能力�
 | 护士 | 护理站操作，医嘱执行确认 |
 | 药剂师 | 药房管理，发药审核 |
 | 检验/检查科 | 检验报告录入，PACS 接口 |
-| 收费/财务 | 挂号收费、医保结算 |
+| 收费/财务 | 挂号收费、保险结算 |
 | 患者 | 通过多渠道预约、查询、随访 |
 | 系统管理员 | 系统配置、权限管理、运维监控 |
 
@@ -76,13 +76,13 @@ ClawHospital:  业务模块 → AI Agent 中枢 → 智能决策 → 多渠道�
 
 | OpenClaw 能力 | ClawHospital 应用场景 |
 |--------------|---------------------|
-| 多渠道消息网关 | 医患沟通：微信推送检验结果、短信预约提醒、企业微信内部协作 |
+| 多渠道消息网关 | 医患沟通：WhatsApp/Telegram 推送检验结果、SMS 预约提醒、Slack/Teams 院内协作 |
 | AI Agent 运行时 | 智能预问诊、辅助诊断建议、用药审核、病历质控 |
 | 插件架构 | 医疗业务模块均以插件形式接入，支持按需部署 |
 | 技能系统 | 医疗知识库查询、药物相互作用检测、临床指南推荐 |
 | 会话管理 | 医患会话、科室协作会话、急诊会诊多方通话 |
 | WebSocket 网关 | 实时消息推送（急危值报警、医嘱变更通知） |
-| 浏览器自动化 | 医保接口对接、外部系统数据采集 |
+| 浏览器自动化 | 保险平台对接、外部系统数据采集 |
 | 定时任务（Cron） | 排班提醒、随访计划执行、报表定时生成 |
 | Web UI (Lit) | 医生/护士工作站前端 |
 | 移动端 App | 移动查房、护理巡检、患者端 App |
@@ -90,7 +90,7 @@ ClawHospital:  业务模块 → AI Agent 中枢 → 智能决策 → 多渠道�
 ### 2.3 差异化竞争力
 
 1. **AI 辅助诊疗全流程**：从预问诊到随访，AI 贯穿每个环节
-2. **真正的多渠道**：患者无需下载 App，通过微信/短信即可完成就医流程
+2. **真正的多渠道**：患者无需下载 App，通过 WhatsApp/Telegram/SMS 即可完成就医流程
 3. **插件化部署**：小诊所可只部署核心模块，大型医院可全量部署
 4. **低成本二次开发**：基于 TypeScript + 插件体系，开发门槛低
 
@@ -101,14 +101,18 @@ ClawHospital:  业务模块 → AI Agent 中枢 → 智能决策 → 多渠道�
 ### 3.1 整体架构
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                        接入层 (Channels)                         │
-│  ┌─────────┐ ┌──────────┐ ┌─────────┐ ┌────────┐ ┌──────────┐ │
-│  │ 微信公众号│ │企业微信   │ │短信网关  │ │Web门户  │ │移动App   │ │
-│  └────┬────┘ └────┬─────┘ └────┬────┘ └───┬────┘ └────┬─────┘ │
-│       └───────────┴────────────┴───────────┴───────────┘       │
-│                            ▼                                    │
-├─────────────────────────────────────────────────────────────────┤
+┌──────────────────────────────────────────────────────────────────────────┐
+│                           接入层 (Channels) [复用+增强]                    │
+│  ┌─────────┐┌─────────┐┌────────┐┌───────┐┌─────┐┌──────┐┌──────────┐ │
+│  │WhatsApp  ││Telegram  ││Discord ││Slack  ││SMS  ││Web   ││Mobile App│ │
+│  └────┬────┘└────┬────┘└───┬────┘└───┬───┘└──┬──┘└──┬───┘└────┬─────┘ │
+│       └──────────┴─────────┴─────────┴───────┴──────┴─────────┘       │
+│  ┌────────┐┌────────┐┌──────────┐┌────────┐┌──────────┐               │
+│  │Signal   ││iMessage ││MS Teams  ││Matrix  ││Google    │  ...更多      │
+│  │         ││         ││          ││        ││Chat     │               │
+│  └────────┘└────────┘└──────────┘└────────┘└──────────┘               │
+│                            ▼                                           │
+├──────────────────────────────────────────────────────────────────────────┤
 │                    网关层 (Gateway) [复用]                        │
 │  ┌──────────────┐ ┌──────────────┐ ┌──────────────────────────┐ │
 │  │ WebSocket RPC │ │ 消息路由引擎  │ │ 会话管理 & 权限控制       │ │
@@ -132,18 +136,18 @@ ClawHospital:  业务模块 → AI Agent 中枢 → 智能决策 → 多渠道�
 │                            ▼                                    │
 ├─────────────────────────────────────────────────────────────────┤
 │                      数据持久层                                   │
-│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────────────┐   │
-│  │PostgreSQL│ │  Redis    │ │ MinIO/OSS│ │ SQLite-Vec       │   │
-│  │(主数据库) │ │(缓存/队列)│ │(文件存储) │ │(AI向量检索)      │   │
-│  └──────────┘ └──────────┘ └──────────┘ └──────────────────┘   │
-└─────────────────────────────────────────────────────────────────┘
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────────────┐       │
+│  │PostgreSQL│ │  Redis    │ │ MinIO/S3 │ │ SQLite-Vec       │       │
+│  │(主数据库) │ │(缓存/队列)│ │(文件存储) │ │(AI向量检索)      │       │
+│  └──────────┘ └──────────┘ └──────────┘ └──────────────────┘       │
+└──────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### 3.2 分层说明
 
 | 层次 | 职责 | OpenClaw 对应 | 改造策略 |
 |------|------|--------------|---------|
-| 接入层 | 多渠道消息接入 | `src/channels/` + `extensions/` | 新增微信公众号/企业微信/短信渠道插件 |
+| 接入层 | 多渠道消息接入 | `src/channels/` + `extensions/` | 复用现有 15+ 渠道，新增 SMS 网关 + 医疗 Web 门户 |
 | 网关层 | RPC 通信、路由、鉴权 | `src/gateway/` | 基本复用，增强 RBAC 权限 |
 | Agent 中枢 | AI 智能体调度 | `src/agents/` | 复用引擎，新增医疗领域 Agent |
 | 业务服务层 | 医疗业务逻辑 | `extensions/` | 全部新建为医疗业务插件 |
@@ -175,7 +179,7 @@ ClawHospital:  业务模块 → AI Agent 中枢 → 智能决策 → 多渠道�
 #### M02 - 门诊管理 (outpatient)
 ```
 功能范围：
-├── 预约挂号（多渠道：Web/微信/电话/现场）
+├── 预约挂号（多渠道：Web/WhatsApp/Telegram/SMS/现场）
 ├── 分诊叫号
 ├── 门诊医生工作站
 │   ├── 病历书写（结构化 + 自由文本）
@@ -270,7 +274,7 @@ ClawHospital:  业务模块 → AI Agent 中枢 → 智能决策 → 多渠道�
 ├── 门诊收费/退费
 ├── 住院预交金
 ├── 出院结算
-├── 医保接口（国家医保平台对接）
+├── 保险接口（国际医疗保险 / Medicare / Medicaid 对接）
 ├── 日结/月结报表
 └── 发票管理
 ```
@@ -291,7 +295,7 @@ ClawHospital:  业务模块 → AI Agent 中枢 → 智能决策 → 多渠道�
 #### A01 - 预问诊 Agent (pre-consultation-agent)
 ```
 能力：
-├── 通过微信/Web 渠道与患者对话
+├── 通过 WhatsApp/Telegram/Web 等渠道与患者对话
 ├── 收集主诉、现病史、既往史
 ├── 生成结构化预问诊报告
 ├── 智能推荐科室
@@ -358,7 +362,7 @@ ClawHospital:  业务模块 → AI Agent 中枢 → 智能决策 → 多渠道�
 ├── 检验/检查项目目录
 ├── 收费项目目录
 ├── 科室/病区设置
-└── 医保目录映射
+└── 保险目录映射（CPT/HCPCS/国际保险编码）
 ```
 
 #### S03 - 系统监控 (monitoring)
@@ -382,7 +386,7 @@ ClawHospital:  业务模块 → AI Agent 中枢 → 智能决策 → 多渠道�
 | 主数据库 | PostgreSQL 16 | 业务数据、事务处理 |
 | 缓存 | Redis 7 | 会话缓存、消息队列、分布式锁 |
 | 向量数据库 | SQLite-Vec (复用) | AI 知识检索、相似病例匹配 |
-| 文件存储 | MinIO / 阿里云 OSS | 影像文件、病历附件、电子签名 |
+| 文件存储 | MinIO / AWS S3 | 影像文件、病历附件、电子签名 |
 | 搜索引擎 | Elasticsearch (可选) | 病历全文检索 |
 
 ### 5.2 核心实体关系
@@ -417,10 +421,12 @@ CREATE TABLE patients (
     name            VARCHAR(50) NOT NULL,            -- 姓名(加密存储)
     gender          SMALLINT NOT NULL,               -- 性别 1男 2女
     birth_date      DATE NOT NULL,                   -- 出生日期
-    id_card_no      VARCHAR(18),                     -- 身份证号(加密存储)
+    national_id     VARCHAR(50),                     -- 国民身份号/SSN/护照号(加密存储)
+    national_id_type VARCHAR(20),                    -- 证件类型(passport/ssn/national_id/...)
     phone           VARCHAR(20),                     -- 手机号(加密存储)
-    insurance_type  VARCHAR(20),                     -- 医保类型
-    insurance_no    VARCHAR(50),                     -- 医保卡号
+    insurance_type  VARCHAR(20),                     -- 保险类型(private/medicare/medicaid/nhs/...)
+    insurance_no    VARCHAR(50),                     -- 保险号码
+    locale          VARCHAR(10) DEFAULT 'en',        -- 患者语言偏好
     address         TEXT,                            -- 地址
     emergency_contact VARCHAR(50),                   -- 紧急联系人
     emergency_phone VARCHAR(20),                     -- 紧急联系电话
@@ -505,7 +511,7 @@ CREATE TABLE staff (
     phone           VARCHAR(20),
     email           VARCHAR(100),
     is_active       BOOLEAN DEFAULT TRUE,
-    channel_bindings JSONB DEFAULT '{}',             -- 多渠道绑定(企业微信等)
+    channel_bindings JSONB DEFAULT '{}',             -- 多渠道绑定(Slack/Teams/WhatsApp等)
     created_at      TIMESTAMPTZ DEFAULT NOW(),
     updated_at      TIMESTAMPTZ DEFAULT NOW()
 );
@@ -546,7 +552,7 @@ CREATE TABLE audit_logs (
 | 插件运行时 | `src/plugins/runtime.ts` | 直接复用 |
 | 定时任务引擎 | `src/cron/` | 直接复用，排班/随访/提醒任务 |
 | 媒体处理 | `src/media/` | 直接复用，处理医疗影像缩略图等 |
-| 浏览器自动化 | `src/browser/` | 复用，用于医保平台对接 |
+| 浏览器自动化 | `src/browser/` | 复用，用于保险平台对接 |
 | 配置管理框架 | `src/config/` | 复用框架，更新 Schema |
 | CLI 框架 | `src/cli/` | 复用，新增医疗管理命令 |
 | OpenTelemetry | `extensions/opentelemetry/` | 直接复用，系统监控 |
@@ -563,15 +569,35 @@ CREATE TABLE audit_logs (
 | 配置 Schema | `src/config/schema.ts` | 更新为医院配置项 |
 | 向量检索 | `src/memory/` | 适配医疗知识库索引 |
 
-### 6.3 需要新增的渠道插件
+### 6.3 渠道策略（面向国际市场）
+
+**核心策略：全面复用 OpenClaw 现有 15+ 渠道**，仅需适配医疗业务消息格式。
+
+#### 直接复用的渠道
+
+| 渠道 | 路径 | 医疗用途 | 优先级 |
+|------|------|---------|--------|
+| WhatsApp | `src/channels/whatsapp/` | 患者端主要沟通渠道（全球覆盖率最高） | P0 |
+| Telegram | `src/channels/telegram/` | 患者通知、报告推送、预约确认 | P0 |
+| Web | `src/channels/web/` | 患者门户 & 医生工作站入口 | P0 |
+| Slack | `extensions/slack/` | 院内团队协作、值班通知、会诊协调 | P0 |
+| Discord | `extensions/discord/` | 医疗团队协作、科室频道 | P1 |
+| MS Teams | `extensions/teams/` | 大型医院机构协作平台 | P1 |
+| Signal | `src/channels/signal/` | 高隐私场景（心理健康、HIV 等） | P1 |
+| iMessage | `src/channels/imessage/` | Apple 生态用户触达 | P2 |
+| Google Chat | `src/channels/google-chat/` | Google Workspace 医院 | P2 |
+| Matrix | `extensions/matrix/` | 自托管隐私优先的机构 | P2 |
+| Mattermost | `extensions/mattermost/` | 自托管院内协作 | P2 |
+| Line | `extensions/line/` | 日本/东南亚市场 | P2 |
+| IRC | `src/channels/irc/` | 技术运维团队 | P3 |
+
+#### 需新增的渠道
 
 | 渠道 | 优先级 | 说明 |
 |------|--------|------|
-| 微信公众号/小程序 | P0 | 患者端主要入口 |
-| 企业微信 | P0 | 院内员工协作渠道 |
-| 短信网关 | P1 | 预约/结果通知 |
-| 钉钉 | P2 | 部分医院使用 |
-| Web 门户 | P0 | 复用现有 Web 渠道并改造 |
+| SMS 网关 (Twilio/Vonage) | P0 | 预约提醒、检验结果、紧急通知（无需安装 App） |
+| Email (SMTP/SendGrid) | P1 | 报告发送、账单通知、随访沟通 |
+| 医疗 Web 门户 | P0 | 复用现有 Web 渠道，改造为患者自助服务门户 |
 
 ---
 
@@ -591,13 +617,14 @@ extensions/
 ├── examination/           # 检查管理 [M08]
 ├── finance/               # 财务结算 [M09]
 ├── scheduling/            # 排班管理 [M10]
-├── channel-wechat/        # 微信渠道
-├── channel-wecom/         # 企业微信渠道
-├── channel-sms/           # 短信网关
+├── channel-sms/           # SMS 网关 (Twilio/Vonage)
+├── channel-email/         # Email 通知渠道 (SendGrid/SMTP)
 ├── medical-knowledge/     # 医疗知识库（AI技能）
-├── insurance-connector/   # 医保接口
+├── insurance-connector/   # 保险接口（多国适配器）
 └── his-auth/              # RBAC 权限系统
 ```
+
+> **注意：** WhatsApp、Telegram、Slack、Discord、Teams、Signal 等渠道直接复用 OpenClaw 现有实现，无需新建。
 
 每个模块遵循统一的插件结构：
 
@@ -642,23 +669,18 @@ export default definePlugin({
 
 ### 8.1 需要移除的模块
 
+> **渠道保留策略：** 面向国际市场，OpenClaw 现有 15+ 渠道全部保留，作为 ClawHospital 的多渠道触达基础设施。
+
 | 模块 | 路径 | 原因 |
 |------|------|------|
-| Telegram 渠道 | `src/channels/telegram/` | 国内医院不使用 |
-| WhatsApp 渠道 | `src/channels/whatsapp/` | 国内医院不使用 |
-| Discord 渠道 | `extensions/discord/` | 非医疗场景 |
-| Signal 渠道 | `src/channels/signal/` | 国内医院不使用 |
-| iMessage 渠道 | `src/channels/imessage/` | 非主流医疗渠道 |
-| IRC 渠道 | `src/channels/irc/` | 非医疗场景 |
-| Matrix 渠道 | `extensions/matrix/` | 非医疗场景 |
-| Slack 渠道 | `extensions/slack/` | 国内医院不使用 |
-| Teams 渠道 | `extensions/teams/` | 可选保留 |
-| Line/Zalo 渠道 | `extensions/line/`, `extensions/zalo/` | 非目标市场 |
 | Spotify 技能 | `skills/spotify-player/` | 非医疗场景 |
 | Apple Notes 技能 | `skills/apple-notes/` | 非医疗场景 |
-| 其他非医疗技能 | `skills/` 中多数 | 替换为医疗技能 |
+| Bear Notes 技能 | `skills/bear-notes/` | 非医疗场景 |
+| Obsidian 技能 | `skills/obsidian/` | 非医疗场景 |
+| Trello 技能 | `skills/trello/` | 非医疗场景（可选保留用于任务管理） |
+| GifGrep 技能 | `skills/gifgrep/` | 非医疗场景 |
+| 其他娱乐/效率技能 | `skills/` 中非医疗相关 | 替换为医疗专用技能 |
 | Lobster 任务处理 | `extensions/lobster/` | 非医疗场景 |
-| iOS/macOS 消费端 App | `apps/ios/`, `apps/macos/` | 需重新设计医疗端 App |
 
 ### 8.2 需要重构的模块
 
@@ -671,6 +693,8 @@ export default definePlugin({
 | `docs/` | 全部重写为 ClawHospital 文档 |
 | `README.md` | 项目说明更新 |
 | `apps/android/` | 改造为移动查房/护理 App |
+| `apps/ios/` | 改造为 iOS 版移动查房/患者 App |
+| `apps/macos/` | 改造为桌面端医生工作站快捷入口 |
 
 ---
 
@@ -687,16 +711,20 @@ export default definePlugin({
 | 数据备份 | PostgreSQL 流复制 + 定时全量备份 |
 | 脱敏展示 | 非授权角色仅可见脱敏后数据 |
 
-### 9.2 合规要求
+### 9.2 合规要求（国际标准）
 
-| 标准 | 说明 |
-|------|------|
-| 《个人信息保护法》 | 患者数据收集、使用、存储合规 |
-| 《数据安全法》 | 医疗数据分级分类保护 |
-| 等保三级 | 三级医院信息系统安全等级保护 |
-| HL7 FHIR | 医疗数据交换标准接口（预留） |
-| ICD-10 | 国际疾病分类编码标准 |
-| 电子病历分级评价 | 参照国家卫健委标准 |
+| 标准 | 说明 | 适用地区 |
+|------|------|---------|
+| HIPAA | 医疗信息隐私与安全保护 | 美国 |
+| GDPR | 通用数据保护条例，患者数据处理合规 | 欧盟/欧洲经济区 |
+| HL7 FHIR R4 | 医疗数据交换标准接口（核心集成标准） | 全球 |
+| ICD-10 / ICD-11 | 国际疾病分类编码标准 | 全球 |
+| SNOMED CT | 临床术语标准化 | 全球 |
+| CPT / HCPCS | 医疗操作与服务编码 | 美国 |
+| DICOM | 医学影像通信标准（PACS 集成） | 全球 |
+| SOC 2 Type II | 服务组织安全控制审计 | 全球（SaaS 部署时） |
+| PIPEDA | 个人信息保护与电子文件法 | 加拿大 |
+| LGPD | 通用数据保护法 | 巴西 |
 
 ### 9.3 AI 安全
 
@@ -765,19 +793,19 @@ export default definePlugin({
 
 ---
 
-### Phase 4 — 多渠道接入（第 19-22 周）
+### Phase 4 — 多渠道医疗适配（第 19-22 周）
 
-**目标：** 打通微信/企业微信等患者触达渠道
+**目标：** 将现有 OpenClaw 渠道适配为医疗场景，新增 SMS/Email 渠道
 
 | 任务 | 详情 | 工时估算 |
 |------|------|---------|
-| 微信公众号渠道 | 患者端消息接入、模板消息 | 7天 |
-| 企业微信渠道 | 院内协作、审批流 | 5天 |
-| 短信网关 | 预约/结果/费用通知 | 3天 |
-| Web 患者门户 | 预约、报告查询、费用查询 | 7天 |
-| 移动端 App 改造 | Android 移动查房/护理 App | 8天 |
+| 渠道医疗适配层 | 为 WhatsApp/Telegram/Slack 等现有渠道封装医疗消息模板（预约确认、检验结果、急危值通知等标准化格式） | 5天 |
+| SMS 网关插件 | 基于 Twilio/Vonage API 新建 SMS 渠道插件，预约/结果/费用通知 | 5天 |
+| Email 通知插件 | 基于 SendGrid/SMTP 新建 Email 渠道插件，报告发送/账单通知 | 3天 |
+| Web 患者门户 | 复用 Web 渠道改造为患者自助服务门户（预约、报告查询、费用查询） | 7天 |
+| 移动端 App 改造 | iOS + Android 改造为移动查房/护理/患者 App | 10天 |
 
-**里程碑交付物：** 多渠道医患沟通全面可用
+**里程碑交付物：** 15+ 渠道医疗适配完成，SMS/Email 新渠道可用，多端患者触达全面可用
 
 ---
 
@@ -790,10 +818,10 @@ export default definePlugin({
 | 住院管理 [M03] | 入院、床位、转科、出院 | 10天 |
 | 护理工作站 | 医嘱执行、体征、护理记录 | 8天 |
 | 财务结算 [M09] | 收费、结算、报表 | 10天 |
-| 医保接口 | 国家医保平台对接 | 10天 |
+| 保险接口 | 国际医疗保险/Medicare/Medicaid/NHS 适配器对接 | 10天 |
 | 检查管理 [M08] | PACS/RIS 对接 | 5天 |
 
-**里程碑交付物：** 住院全流程 + 财务结算 + 医保对接
+**里程碑交付物：** 住院全流程 + 财务结算 + 保险对接
 
 ---
 
@@ -825,7 +853,7 @@ export default definePlugin({
 | ORM | Drizzle ORM | **新增** |
 | 主数据库 | PostgreSQL 16 | **新增** |
 | 缓存 | Redis 7 | **新增** |
-| 文件存储 | MinIO | **新增** |
+| 文件存储 | MinIO / AWS S3 | **新增** |
 | 向量检索 | SQLite-Vec | 复用 |
 | 任务调度 | Croner | 复用 |
 | 监控 | OpenTelemetry | 复用 |
@@ -845,8 +873,10 @@ export default definePlugin({
 | 医疗业务复杂度超预期 | 高 | 分阶段交付，优先保证门诊流程最小可用 |
 | AI 模型合规性 | 中 | AI 建议仅作辅助，人工确认后生效；敏感数据脱敏后送模型 |
 | PostgreSQL 迁移工作量 | 低 | 使用 Drizzle ORM 抽象层，降低数据库耦合 |
-| 微信/企业微信接口变动 | 中 | 渠道层抽象隔离，接口变动只影响渠道插件 |
-| 医保接口地区差异 | 高 | 医保连接器设计为可插拔适配器模式 |
+| 渠道 API 变动（WhatsApp/Telegram 等） | 中 | 复用 OpenClaw 已有渠道维护，上游更新时同步 |
+| 各国保险接口差异 | 高 | 保险连接器设计为可插拔适配器模式，按国家/地区分别实现 |
+| 多语言/本地化 | 中 | 系统 UI 与消息模板支持 i18n，优先英语，渐进增加语言 |
+| HIPAA/GDPR 合规成本 | 高 | 提前引入合规框架，数据加密/审计/同意管理从第一阶段内置 |
 | 性能瓶颈（并发门诊高峰） | 中 | Redis 缓存 + 数据库连接池 + 读写分离 |
 
 ---
@@ -866,8 +896,13 @@ clawhospital/
 │   │   │   ├── emr-quality.ts
 │   │   │   └── patient-service.ts
 │   │   └── medical-tools.ts       # 医疗工具注册 [新增]
-│   ├── channels/                  # 渠道实现
-│   │   ├── web/                   # Web 门户 [复用+改造]
+│   ├── channels/                  # 渠道实现 [全部复用]
+│   │   ├── telegram/              # Telegram [复用]
+│   │   ├── whatsapp/              # WhatsApp [复用]
+│   │   ├── discord/               # Discord [复用]
+│   │   ├── signal/                # Signal [复用]
+│   │   ├── imessage/              # iMessage [复用]
+│   │   ├── web/                   # Web 门户 [复用+改造为患者门户]
 │   │   └── registry.ts            # 渠道注册 [改造]
 │   ├── config/                    # 配置管理 [复用+改造]
 │   ├── plugins/                   # 插件系统 [复用]
@@ -909,11 +944,13 @@ clawhospital/
 │   ├── examination/              # [M08] 检查管理
 │   ├── finance/                  # [M09] 财务结算
 │   ├── scheduling/               # [M10] 排班管理
-│   ├── channel-wechat/           # 微信渠道
-│   ├── channel-wecom/            # 企业微信渠道
-│   ├── channel-sms/              # 短信渠道
+│   ├── channel-sms/              # SMS 渠道 (Twilio/Vonage) [新增]
+│   ├── channel-email/            # Email 渠道 (SendGrid/SMTP) [新增]
+│   ├── slack/                    # Slack [复用]
+│   ├── teams/                    # MS Teams [复用]
+│   ├── matrix/                   # Matrix [复用]
 │   ├── medical-knowledge/        # 医疗知识库
-│   ├── insurance-connector/      # 医保接口
+│   ├── insurance-connector/      # 保险接口（多国适配器）
 │   ├── his-auth/                 # 权限管理
 │   └── opentelemetry/            # 监控 [复用]
 │
@@ -928,7 +965,9 @@ clawhospital/
 │   └── vite.config.ts
 │
 ├── apps/
-│   └── android/                   # 移动查房/护理 App [改造]
+│   ├── android/                   # Android 移动查房/护理 App [改造]
+│   ├── ios/                       # iOS 移动查房/患者 App [改造]
+│   └── macos/                     # macOS 桌面快捷入口 [改造]
 │
 ├── seeds/                         # 基础数据种子
 │   ├── icd10.json                 # ICD-10 编码库
@@ -960,10 +999,10 @@ clawhospital/
 
 ClawHospital 的核心改造策略是 **"框架复用、业务新建、渠道替换、AI 增强"**：
 
-1. **复用 OpenClaw 约 60% 的框架代码**（网关、Agent 引擎、插件系统、工具链、定时任务、媒体处理）
+1. **复用 OpenClaw 约 70% 的框架代码**（网关、Agent 引擎、插件系统、工具链、定时任务、媒体处理、**全部 15+ 消息渠道**）
 2. **全新开发 10 个医疗业务插件 + 5 个 AI Agent**
-3. **替换渠道层**，移除海外社交平台，接入微信/企业微信/短信
+3. **渠道全面复用**，保留 WhatsApp/Telegram/Slack/Discord/Signal 等全部现有渠道，新增 SMS 网关 + Email 通知
 4. **升级数据层**，从 SQLite/JSON 升级为 PostgreSQL + Redis
-5. **强化安全**，增加 RBAC、审计日志、数据加密
+5. **强化安全与合规**，增加 RBAC、审计日志、数据加密，遵循 HIPAA/GDPR 国际标准
 
 预计总开发周期 **32 周**（8 个月），分 6 个阶段递进交付。
