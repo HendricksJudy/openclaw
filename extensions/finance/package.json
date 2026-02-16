@@ -1,0 +1,11 @@
+{
+  "name": "@clawhospital/finance",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ClawHospital finance - billing, payments, insurance claims, and financial reporting",
+  "type": "module",
+  "openclaw": {
+    "extensions": ["./index.ts"]
+  },
+  "dependencies": {}
+}

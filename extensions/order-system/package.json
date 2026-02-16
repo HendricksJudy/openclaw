@@ -1,0 +1,11 @@
+{
+  "name": "@clawhospital/order-system",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ClawHospital medical order lifecycle - creation, review, execution, tracking",
+  "type": "module",
+  "openclaw": {
+    "extensions": ["./index.ts"]
+  },
+  "dependencies": {}
+}

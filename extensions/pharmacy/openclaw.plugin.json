@@ -1,0 +1,6 @@
+{
+  "id": "clawhospital-pharmacy",
+  "name": "Pharmacy Management",
+  "description": "Drug catalog, inventory, dispensing workflow, and interaction checking",
+  "version": "1.0.0"
+}
