@@ -1,0 +1,121 @@
+##
+## ClawHospital - Docker Compose
+##
+## Extends the base OpenClaw docker-compose with medical infrastructure services.
+##
+## Usage:
+##   docker compose -f docker-compose.yml -f docker-compose.clawhospital.yml up -d
+##
+## Or standalone:
+##   docker compose -f docker-compose.clawhospital.yml up -d
+##
+
+services:
+  # ── PostgreSQL 16 ──────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${CLAWHOSPITAL_DB_NAME:-clawhospital}
+      POSTGRES_USER: ${CLAWHOSPITAL_DB_USER:-clawhospital}
+      POSTGRES_PASSWORD: ${CLAWHOSPITAL_DB_PASSWORD:-clawhospital}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./src/db/migrations:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "${CLAWHOSPITAL_DB_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${CLAWHOSPITAL_DB_USER:-clawhospital}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ── Redis 7 ────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    command: >
+      redis-server
+      --maxmemory 256mb
+      --maxmemory-policy allkeys-lru
+      --appendonly yes
+    volumes:
+      - redis_data:/data
+    ports:
+      - "${CLAWHOSPITAL_REDIS_PORT:-6379}:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ── MinIO (S3-compatible object storage) ───────────────────────
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${CLAWHOSPITAL_MINIO_USER:-clawhospital}
+      MINIO_ROOT_PASSWORD: ${CLAWHOSPITAL_MINIO_PASSWORD:-clawhospital123}
+    volumes:
+      - minio_data:/data
+    ports:
+      - "${CLAWHOSPITAL_MINIO_PORT:-9000}:9000"
+      - "${CLAWHOSPITAL_MINIO_CONSOLE_PORT:-9001}:9001"
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ── OpenClaw Gateway (with ClawHospital extensions) ────────────
+  clawhospital-gateway:
+    image: ${OPENCLAW_IMAGE:-openclaw:local}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      HOME: /home/node
+      TERM: xterm-256color
+      # OpenClaw gateway config
+      OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_GATEWAY_TOKEN}
+      # ClawHospital database
+      CLAWHOSPITAL_DB_HOST: postgres
+      CLAWHOSPITAL_DB_PORT: "5432"
+      CLAWHOSPITAL_DB_NAME: ${CLAWHOSPITAL_DB_NAME:-clawhospital}
+      CLAWHOSPITAL_DB_USER: ${CLAWHOSPITAL_DB_USER:-clawhospital}
+      CLAWHOSPITAL_DB_PASSWORD: ${CLAWHOSPITAL_DB_PASSWORD:-clawhospital}
+      # ClawHospital auth
+      CLAWHOSPITAL_JWT_SECRET: ${CLAWHOSPITAL_JWT_SECRET}
+      # Redis
+      CLAWHOSPITAL_REDIS_URL: redis://redis:6379
+      # MinIO
+      CLAWHOSPITAL_S3_ENDPOINT: http://minio:9000
+      CLAWHOSPITAL_S3_ACCESS_KEY: ${CLAWHOSPITAL_MINIO_USER:-clawhospital}
+      CLAWHOSPITAL_S3_SECRET_KEY: ${CLAWHOSPITAL_MINIO_PASSWORD:-clawhospital123}
+      CLAWHOSPITAL_S3_BUCKET: ${CLAWHOSPITAL_S3_BUCKET:-clawhospital}
+    volumes:
+      - ${OPENCLAW_CONFIG_DIR:-./data/config}:/home/node/.openclaw
+      - ${OPENCLAW_WORKSPACE_DIR:-./data/workspace}:/home/node/.openclaw/workspace
+    ports:
+      - "${OPENCLAW_GATEWAY_PORT:-18789}:18789"
+      - "${OPENCLAW_BRIDGE_PORT:-18790}:18790"
+    init: true
+    restart: unless-stopped
+    command:
+      [
+        "node",
+        "dist/index.js",
+        "gateway",
+        "--bind",
+        "${OPENCLAW_GATEWAY_BIND:-lan}",
+        "--port",
+        "18789",
+      ]
+
+volumes:
+  postgres_data:
+  redis_data:
+  minio_data:

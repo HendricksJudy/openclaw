@@ -1,0 +1,11 @@
+{
+  "name": "@clawhospital/patient-management",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ClawHospital patient registration, search, and management plugin",
+  "type": "module",
+  "openclaw": {
+    "extensions": ["./index.ts"]
+  },
+  "dependencies": {}
+}

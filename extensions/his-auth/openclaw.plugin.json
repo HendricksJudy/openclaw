@@ -1,0 +1,6 @@
+{
+  "id": "clawhospital-his-auth",
+  "name": "ClawHospital Auth",
+  "description": "Hospital RBAC authentication, user management, and login API",
+  "version": "1.0.0"
+}

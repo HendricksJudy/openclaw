@@ -1,0 +1,11 @@
+{
+  "name": "@clawhospital/channel-email",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ClawHospital Email channel plugin via SendGrid/SMTP",
+  "type": "module",
+  "openclaw": {
+    "extensions": ["./index.ts"]
+  },
+  "dependencies": {}
+}
