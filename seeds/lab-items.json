@@ -1,0 +1,194 @@
+{
+  "_meta": {
+    "source": "ClawHospital Laboratory Test Catalog (sample seed data)",
+    "description": "Common laboratory tests with reference ranges and specimen requirements",
+    "lastUpdated": "2024-06-01"
+  },
+  "labTests": [
+    {
+      "code": "CBC",
+      "name": "Complete Blood Count",
+      "category": "Hematology",
+      "specimen": "EDTA whole blood",
+      "container": "Lavender top",
+      "volume": "3 mL",
+      "turnaroundTime": "2 hours",
+      "components": [
+        { "name": "WBC", "unit": "x10^9/L", "refRange": "4.5-11.0" },
+        { "name": "RBC", "unit": "x10^12/L", "refRange": "4.5-5.5 (M), 4.0-5.0 (F)" },
+        { "name": "Hemoglobin", "unit": "g/dL", "refRange": "13.5-17.5 (M), 12.0-16.0 (F)" },
+        { "name": "Hematocrit", "unit": "%", "refRange": "38.3-48.6 (M), 35.5-44.9 (F)" },
+        { "name": "Platelets", "unit": "x10^9/L", "refRange": "150-400" },
+        { "name": "MCV", "unit": "fL", "refRange": "80-100" },
+        { "name": "MCH", "unit": "pg", "refRange": "27-33" },
+        { "name": "MCHC", "unit": "g/dL", "refRange": "33-36" }
+      ]
+    },
+    {
+      "code": "BMP",
+      "name": "Basic Metabolic Panel",
+      "category": "Chemistry",
+      "specimen": "Serum or plasma",
+      "container": "Green or Red top",
+      "volume": "5 mL",
+      "turnaroundTime": "2 hours",
+      "components": [
+        { "name": "Glucose", "unit": "mg/dL", "refRange": "70-100 (fasting)" },
+        { "name": "BUN", "unit": "mg/dL", "refRange": "7-20" },
+        { "name": "Creatinine", "unit": "mg/dL", "refRange": "0.7-1.3 (M), 0.6-1.1 (F)" },
+        { "name": "Sodium", "unit": "mEq/L", "refRange": "136-145" },
+        { "name": "Potassium", "unit": "mEq/L", "refRange": "3.5-5.0" },
+        { "name": "Chloride", "unit": "mEq/L", "refRange": "98-106" },
+        { "name": "CO2", "unit": "mEq/L", "refRange": "23-29" },
+        { "name": "Calcium", "unit": "mg/dL", "refRange": "8.5-10.5" }
+      ]
+    },
+    {
+      "code": "CMP",
+      "name": "Comprehensive Metabolic Panel",
+      "category": "Chemistry",
+      "specimen": "Serum",
+      "container": "Red top / SST",
+      "volume": "5 mL",
+      "turnaroundTime": "2 hours",
+      "components": [
+        { "name": "Glucose", "unit": "mg/dL", "refRange": "70-100" },
+        { "name": "BUN", "unit": "mg/dL", "refRange": "7-20" },
+        { "name": "Creatinine", "unit": "mg/dL", "refRange": "0.7-1.3" },
+        { "name": "Sodium", "unit": "mEq/L", "refRange": "136-145" },
+        { "name": "Potassium", "unit": "mEq/L", "refRange": "3.5-5.0" },
+        { "name": "Chloride", "unit": "mEq/L", "refRange": "98-106" },
+        { "name": "CO2", "unit": "mEq/L", "refRange": "23-29" },
+        { "name": "Calcium", "unit": "mg/dL", "refRange": "8.5-10.5" },
+        { "name": "Total Protein", "unit": "g/dL", "refRange": "6.0-8.3" },
+        { "name": "Albumin", "unit": "g/dL", "refRange": "3.5-5.5" },
+        { "name": "Bilirubin Total", "unit": "mg/dL", "refRange": "0.1-1.2" },
+        { "name": "ALP", "unit": "U/L", "refRange": "44-147" },
+        { "name": "AST", "unit": "U/L", "refRange": "10-40" },
+        { "name": "ALT", "unit": "U/L", "refRange": "7-56" }
+      ]
+    },
+    {
+      "code": "LIPID",
+      "name": "Lipid Panel",
+      "category": "Chemistry",
+      "specimen": "Serum (fasting preferred)",
+      "container": "Red top / SST",
+      "volume": "5 mL",
+      "turnaroundTime": "2 hours",
+      "components": [
+        { "name": "Total Cholesterol", "unit": "mg/dL", "refRange": "<200 desirable" },
+        { "name": "LDL Cholesterol", "unit": "mg/dL", "refRange": "<100 optimal" },
+        { "name": "HDL Cholesterol", "unit": "mg/dL", "refRange": ">40 (M), >50 (F)" },
+        { "name": "Triglycerides", "unit": "mg/dL", "refRange": "<150" },
+        { "name": "VLDL", "unit": "mg/dL", "refRange": "5-40" }
+      ]
+    },
+    {
+      "code": "TSH",
+      "name": "Thyroid Stimulating Hormone",
+      "category": "Endocrine",
+      "specimen": "Serum",
+      "container": "Red top / SST",
+      "volume": "3 mL",
+      "turnaroundTime": "4 hours",
+      "components": [
+        { "name": "TSH", "unit": "mIU/L", "refRange": "0.27-4.20" }
+      ]
+    },
+    {
+      "code": "HBA1C",
+      "name": "Hemoglobin A1c",
+      "category": "Chemistry/Endocrine",
+      "specimen": "EDTA whole blood",
+      "container": "Lavender top",
+      "volume": "3 mL",
+      "turnaroundTime": "4 hours",
+      "components": [
+        { "name": "HbA1c", "unit": "%", "refRange": "<5.7 normal; 5.7-6.4 prediabetes; ≥6.5 diabetes" }
+      ]
+    },
+    {
+      "code": "UA",
+      "name": "Urinalysis",
+      "category": "Urinalysis",
+      "specimen": "Random urine (clean catch midstream)",
+      "container": "Urine cup",
+      "volume": "30 mL",
+      "turnaroundTime": "1 hour",
+      "components": [
+        { "name": "Color", "unit": "", "refRange": "Yellow" },
+        { "name": "Clarity", "unit": "", "refRange": "Clear" },
+        { "name": "pH", "unit": "", "refRange": "4.6-8.0" },
+        { "name": "Specific Gravity", "unit": "", "refRange": "1.005-1.030" },
+        { "name": "Protein", "unit": "", "refRange": "Negative" },
+        { "name": "Glucose", "unit": "", "refRange": "Negative" },
+        { "name": "Ketones", "unit": "", "refRange": "Negative" },
+        { "name": "Blood", "unit": "", "refRange": "Negative" },
+        { "name": "Nitrite", "unit": "", "refRange": "Negative" },
+        { "name": "Leukocyte Esterase", "unit": "", "refRange": "Negative" }
+      ]
+    },
+    {
+      "code": "TROP",
+      "name": "Troponin I (High Sensitivity)",
+      "category": "Cardiac",
+      "specimen": "Serum or plasma",
+      "container": "Green or Red top",
+      "volume": "3 mL",
+      "turnaroundTime": "1 hour",
+      "components": [
+        { "name": "hs-Troponin I", "unit": "ng/L", "refRange": "<14 (F), <22 (M) — 99th percentile" }
+      ]
+    },
+    {
+      "code": "PT_INR",
+      "name": "Prothrombin Time / INR",
+      "category": "Coagulation",
+      "specimen": "Citrated plasma",
+      "container": "Blue top",
+      "volume": "2.7 mL",
+      "turnaroundTime": "1 hour",
+      "components": [
+        { "name": "PT", "unit": "seconds", "refRange": "11.0-13.5" },
+        { "name": "INR", "unit": "ratio", "refRange": "0.8-1.1 (not on anticoagulation)" }
+      ]
+    },
+    {
+      "code": "BNP",
+      "name": "B-type Natriuretic Peptide",
+      "category": "Cardiac",
+      "specimen": "EDTA plasma",
+      "container": "Lavender top",
+      "volume": "3 mL",
+      "turnaroundTime": "2 hours",
+      "components": [
+        { "name": "BNP", "unit": "pg/mL", "refRange": "<100 (HF unlikely), >400 (HF likely)" }
+      ]
+    },
+    {
+      "code": "CRP",
+      "name": "C-Reactive Protein",
+      "category": "Immunology",
+      "specimen": "Serum",
+      "container": "Red top / SST",
+      "volume": "3 mL",
+      "turnaroundTime": "2 hours",
+      "components": [
+        { "name": "CRP", "unit": "mg/L", "refRange": "<3.0" }
+      ]
+    },
+    {
+      "code": "COVID_PCR",
+      "name": "SARS-CoV-2 RT-PCR",
+      "category": "Microbiology/Molecular",
+      "specimen": "Nasopharyngeal swab",
+      "container": "Viral transport medium",
+      "volume": "N/A",
+      "turnaroundTime": "4-24 hours",
+      "components": [
+        { "name": "SARS-CoV-2 RNA", "unit": "qualitative", "refRange": "Not Detected" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,235 @@
+{
+  "_meta": {
+    "source": "ClawHospital Charge Master (sample seed data)",
+    "description": "Common charge items with CPT/HCPCS codes and default pricing",
+    "lastUpdated": "2024-06-01",
+    "currency": "USD",
+    "note": "Prices are sample values for development/testing only"
+  },
+  "chargeItems": [
+    {
+      "code": "99213",
+      "codeSystem": "CPT",
+      "category": "E&M",
+      "description": "Office visit, established patient, low complexity",
+      "defaultPrice": 125.00
+    },
+    {
+      "code": "99214",
+      "codeSystem": "CPT",
+      "category": "E&M",
+      "description": "Office visit, established patient, moderate complexity",
+      "defaultPrice": 185.00
+    },
+    {
+      "code": "99215",
+      "codeSystem": "CPT",
+      "category": "E&M",
+      "description": "Office visit, established patient, high complexity",
+      "defaultPrice": 250.00
+    },
+    {
+      "code": "99201",
+      "codeSystem": "CPT",
+      "category": "E&M",
+      "description": "Office visit, new patient, straightforward",
+      "defaultPrice": 150.00
+    },
+    {
+      "code": "99203",
+      "codeSystem": "CPT",
+      "category": "E&M",
+      "description": "Office visit, new patient, low complexity",
+      "defaultPrice": 200.00
+    },
+    {
+      "code": "99221",
+      "codeSystem": "CPT",
+      "category": "Hospital",
+      "description": "Initial hospital care, low complexity",
+      "defaultPrice": 350.00
+    },
+    {
+      "code": "99222",
+      "codeSystem": "CPT",
+      "category": "Hospital",
+      "description": "Initial hospital care, moderate complexity",
+      "defaultPrice": 475.00
+    },
+    {
+      "code": "99223",
+      "codeSystem": "CPT",
+      "category": "Hospital",
+      "description": "Initial hospital care, high complexity",
+      "defaultPrice": 600.00
+    },
+    {
+      "code": "99231",
+      "codeSystem": "CPT",
+      "category": "Hospital",
+      "description": "Subsequent hospital care, low complexity",
+      "defaultPrice": 150.00
+    },
+    {
+      "code": "99238",
+      "codeSystem": "CPT",
+      "category": "Hospital",
+      "description": "Hospital discharge day management, 30 min or less",
+      "defaultPrice": 200.00
+    },
+    {
+      "code": "99281",
+      "codeSystem": "CPT",
+      "category": "Emergency",
+      "description": "ED visit, self-limited or minor problem",
+      "defaultPrice": 175.00
+    },
+    {
+      "code": "99285",
+      "codeSystem": "CPT",
+      "category": "Emergency",
+      "description": "ED visit, high severity with significant threat to life",
+      "defaultPrice": 750.00
+    },
+    {
+      "code": "85025",
+      "codeSystem": "CPT",
+      "category": "Laboratory",
+      "description": "Complete blood count (CBC) with automated differential",
+      "defaultPrice": 35.00
+    },
+    {
+      "code": "80048",
+      "codeSystem": "CPT",
+      "category": "Laboratory",
+      "description": "Basic metabolic panel (BMP)",
+      "defaultPrice": 45.00
+    },
+    {
+      "code": "80053",
+      "codeSystem": "CPT",
+      "category": "Laboratory",
+      "description": "Comprehensive metabolic panel (CMP)",
+      "defaultPrice": 55.00
+    },
+    {
+      "code": "80061",
+      "codeSystem": "CPT",
+      "category": "Laboratory",
+      "description": "Lipid panel",
+      "defaultPrice": 40.00
+    },
+    {
+      "code": "84443",
+      "codeSystem": "CPT",
+      "category": "Laboratory",
+      "description": "Thyroid stimulating hormone (TSH)",
+      "defaultPrice": 50.00
+    },
+    {
+      "code": "83036",
+      "codeSystem": "CPT",
+      "category": "Laboratory",
+      "description": "Hemoglobin A1c",
+      "defaultPrice": 45.00
+    },
+    {
+      "code": "81001",
+      "codeSystem": "CPT",
+      "category": "Laboratory",
+      "description": "Urinalysis, automated with microscopy",
+      "defaultPrice": 25.00
+    },
+    {
+      "code": "71046",
+      "codeSystem": "CPT",
+      "category": "Radiology",
+      "description": "Chest X-ray, 2 views",
+      "defaultPrice": 150.00
+    },
+    {
+      "code": "74177",
+      "codeSystem": "CPT",
+      "category": "Radiology",
+      "description": "CT abdomen and pelvis with contrast",
+      "defaultPrice": 1200.00
+    },
+    {
+      "code": "70553",
+      "codeSystem": "CPT",
+      "category": "Radiology",
+      "description": "MRI brain without and with contrast",
+      "defaultPrice": 2500.00
+    },
+    {
+      "code": "76856",
+      "codeSystem": "CPT",
+      "category": "Radiology",
+      "description": "Ultrasound pelvic, complete",
+      "defaultPrice": 350.00
+    },
+    {
+      "code": "93000",
+      "codeSystem": "CPT",
+      "category": "Cardiology",
+      "description": "Electrocardiogram (ECG), 12-lead, with interpretation",
+      "defaultPrice": 75.00
+    },
+    {
+      "code": "93306",
+      "codeSystem": "CPT",
+      "category": "Cardiology",
+      "description": "Echocardiography, transthoracic, complete",
+      "defaultPrice": 800.00
+    },
+    {
+      "code": "G0108",
+      "codeSystem": "HCPCS",
+      "category": "Diabetes",
+      "description": "Diabetes outpatient self-management training, individual",
+      "defaultPrice": 100.00
+    },
+    {
+      "code": "96372",
+      "codeSystem": "CPT",
+      "category": "Injection",
+      "description": "Therapeutic, prophylactic, or diagnostic injection, subcutaneous or intramuscular",
+      "defaultPrice": 65.00
+    },
+    {
+      "code": "36415",
+      "codeSystem": "CPT",
+      "category": "Phlebotomy",
+      "description": "Collection of venous blood by venipuncture",
+      "defaultPrice": 15.00
+    },
+    {
+      "code": "99024",
+      "codeSystem": "CPT",
+      "category": "Follow-up",
+      "description": "Postoperative follow-up visit (included in surgical package)",
+      "defaultPrice": 0.00
+    },
+    {
+      "code": "ROOM-SEMI",
+      "codeSystem": "LOCAL",
+      "category": "Room",
+      "description": "Semi-private room, per day",
+      "defaultPrice": 800.00
+    },
+    {
+      "code": "ROOM-PRIV",
+      "codeSystem": "LOCAL",
+      "category": "Room",
+      "description": "Private room, per day",
+      "defaultPrice": 1200.00
+    },
+    {
+      "code": "ROOM-ICU",
+      "codeSystem": "LOCAL",
+      "category": "Room",
+      "description": "ICU room, per day",
+      "defaultPrice": 3500.00
+    }
+  ]
+}
