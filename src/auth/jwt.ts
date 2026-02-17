@@ -5,7 +5,7 @@
  * Uses Node.js built-in crypto for HMAC-SHA256 JWT signing (no external dependency).
  */
 
-import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
+import { createHmac, timingSafeEqual } from "node:crypto";
 
 export type JwtPayload = {
   sub: string; // user ID
@@ -14,6 +14,7 @@ export type JwtPayload = {
   roles: string[]; // role codes
   iat: number;
   exp: number;
+  type?: "access" | "refresh";
 };
 
 export type TokenPair = {
@@ -44,30 +45,14 @@ function hmacSign(data: string, secret: string): string {
   return createHmac("sha256", secret).update(data).digest("base64url");
 }
 
-export function generateAccessToken(payload: Omit<JwtPayload, "iat" | "exp">): string {
-  const now = Math.floor(Date.now() / 1000);
-  const fullPayload: JwtPayload = {
-    ...payload,
-    iat: now,
-    exp: now + ACCESS_TOKEN_TTL,
-  };
-
+function signJwt(payload: Record<string, unknown>): string {
   const header = base64url(JSON.stringify({ alg: "HS256", typ: "JWT" }));
-  const body = base64url(JSON.stringify(fullPayload));
+  const body = base64url(JSON.stringify(payload));
   const signature = hmacSign(`${header}.${body}`, getSecret());
-
   return `${header}.${body}.${signature}`;
 }
 
-export function generateTokenPair(payload: Omit<JwtPayload, "iat" | "exp">): TokenPair {
-  return {
-    accessToken: generateAccessToken(payload),
-    refreshToken: randomBytes(48).toString("base64url"),
-    expiresIn: ACCESS_TOKEN_TTL,
-  };
-}
-
-export function verifyToken(token: string): JwtPayload | null {
+function decodeAndVerify(token: string): JwtPayload | null {
   try {
     const parts = token.split(".");
     if (parts.length !== 3) return null;
@@ -92,6 +77,54 @@ export function verifyToken(token: string): JwtPayload | null {
   } catch {
     return null;
   }
+}
+
+export function generateAccessToken(payload: Omit<JwtPayload, "iat" | "exp" | "type">): string {
+  const now = Math.floor(Date.now() / 1000);
+  return signJwt({
+    ...payload,
+    type: "access",
+    iat: now,
+    exp: now + ACCESS_TOKEN_TTL,
+  });
+}
+
+function generateRefreshToken(payload: Omit<JwtPayload, "iat" | "exp" | "type">): string {
+  const now = Math.floor(Date.now() / 1000);
+  return signJwt({
+    sub: payload.sub,
+    staffId: payload.staffId,
+    username: payload.username,
+    roles: payload.roles,
+    type: "refresh",
+    iat: now,
+    exp: now + REFRESH_TOKEN_TTL,
+  });
+}
+
+export function generateTokenPair(payload: Omit<JwtPayload, "iat" | "exp" | "type">): TokenPair {
+  return {
+    accessToken: generateAccessToken(payload),
+    refreshToken: generateRefreshToken(payload),
+    expiresIn: ACCESS_TOKEN_TTL,
+  };
+}
+
+/** Verify an access token. Returns null if invalid, expired, or wrong type. */
+export function verifyToken(token: string): JwtPayload | null {
+  const payload = decodeAndVerify(token);
+  if (!payload) return null;
+  // Accept tokens without type field (backwards compat) or explicit access type
+  if (payload.type && payload.type !== "access") return null;
+  return payload;
+}
+
+/** Verify a refresh token. Returns null if invalid, expired, or wrong type. */
+export function verifyRefreshToken(token: string): JwtPayload | null {
+  const payload = decodeAndVerify(token);
+  if (!payload) return null;
+  if (payload.type !== "refresh") return null;
+  return payload;
 }
 
 export { ACCESS_TOKEN_TTL, REFRESH_TOKEN_TTL };

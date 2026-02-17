@@ -1,0 +1,6 @@
+{
+  "id": "clawhospital-order-system",
+  "name": "Order System",
+  "description": "Medical order lifecycle management: creation, review, approval, execution, and tracking",
+  "version": "1.0.0"
+}

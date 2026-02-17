@@ -1,0 +1,11 @@
+{
+  "name": "@clawhospital/scheduling",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ClawHospital scheduling - staff schedules, appointment slots, and roster management",
+  "type": "module",
+  "openclaw": {
+    "extensions": ["./index.ts"]
+  },
+  "dependencies": {}
+}

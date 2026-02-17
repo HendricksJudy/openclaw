@@ -1,0 +1,6 @@
+{
+  "id": "clawhospital-outpatient",
+  "name": "Outpatient Management",
+  "description": "Appointment booking, triage queue, and outpatient doctor workstation",
+  "version": "1.0.0"
+}

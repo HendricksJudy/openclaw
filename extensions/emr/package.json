@@ -1,0 +1,11 @@
+{
+  "name": "@clawhospital/emr",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ClawHospital EMR - clinical document management, templates, signing, and quality scoring",
+  "type": "module",
+  "openclaw": {
+    "extensions": ["./index.ts"]
+  },
+  "dependencies": {}
+}

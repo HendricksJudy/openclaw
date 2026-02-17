@@ -10,3 +10,7 @@ export * from "./staff.ts";
 export * from "./departments.ts";
 export * from "./auth.ts";
 export * from "./audit.ts";
+export * from "./pharmacy.ts";
+export * from "./laboratory.ts";
+export * from "./scheduling.ts";
+export * from "./finance.ts";

@@ -1,0 +1,6 @@
+{
+  "id": "clawhospital-laboratory",
+  "name": "Laboratory Management",
+  "description": "Lab test catalog, specimen tracking, result entry/verification, and critical value alerts",
+  "version": "1.0.0"
+}

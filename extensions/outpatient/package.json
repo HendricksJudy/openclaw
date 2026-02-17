@@ -1,0 +1,11 @@
+{
+  "name": "@clawhospital/outpatient",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ClawHospital outpatient management - appointments, triage, and doctor workstation",
+  "type": "module",
+  "openclaw": {
+    "extensions": ["./index.ts"]
+  },
+  "dependencies": {}
+}

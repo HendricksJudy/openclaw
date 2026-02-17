@@ -1,0 +1,11 @@
+{
+  "name": "@clawhospital/laboratory",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ClawHospital laboratory management - specimen tracking, results, critical value alerts",
+  "type": "module",
+  "openclaw": {
+    "extensions": ["./index.ts"]
+  },
+  "dependencies": {}
+}

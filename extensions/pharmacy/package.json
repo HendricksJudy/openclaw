@@ -1,0 +1,11 @@
+{
+  "name": "@clawhospital/pharmacy",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ClawHospital pharmacy management - drug catalog, inventory, and dispensing",
+  "type": "module",
+  "openclaw": {
+    "extensions": ["./index.ts"]
+  },
+  "dependencies": {}
+}

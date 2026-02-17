@@ -16,6 +16,10 @@ import * as staff from "./schema/staff.ts";
 import * as auth from "./schema/auth.ts";
 import * as audit from "./schema/audit.ts";
 import * as departments from "./schema/departments.ts";
+import * as pharmacy from "./schema/pharmacy.ts";
+import * as laboratory from "./schema/laboratory.ts";
+import * as scheduling from "./schema/scheduling.ts";
+import * as finance from "./schema/finance.ts";
 
 const schema = {
   ...patients,
@@ -26,6 +30,10 @@ const schema = {
   ...auth,
   ...audit,
   ...departments,
+  ...pharmacy,
+  ...laboratory,
+  ...scheduling,
+  ...finance,
 };
 
 export type HospitalSchema = typeof schema;

@@ -1,0 +1,6 @@
+{
+  "id": "clawhospital-emr",
+  "name": "Electronic Medical Records",
+  "description": "Clinical document management with templates, signing workflow, and AI quality scoring",
+  "version": "1.0.0"
+}
